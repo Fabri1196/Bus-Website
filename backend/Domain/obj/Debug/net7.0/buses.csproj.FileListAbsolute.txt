@@ -1,0 +1,5 @@
+C:\Users\Usuario\Desktop\bus-website\backend\Domain\obj\Debug\net7.0\buses.csproj.AssemblyReference.cache
+C:\Users\Usuario\Desktop\bus-website\backend\Domain\obj\Debug\net7.0\buses.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Usuario\Desktop\bus-website\backend\Domain\obj\Debug\net7.0\buses.AssemblyInfoInputs.cache
+C:\Users\Usuario\Desktop\bus-website\backend\Domain\obj\Debug\net7.0\buses.AssemblyInfo.cs
+C:\Users\Usuario\Desktop\bus-website\backend\Domain\obj\Debug\net7.0\buses.csproj.CoreCompileInputs.cache
