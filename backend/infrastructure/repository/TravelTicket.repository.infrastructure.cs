@@ -5,9 +5,6 @@ using LiteDB;
 
 namespace Infrastructure.Repository
 {
-    /// <summary>
-    /// Handles database operations using LiteDB (NoSQL)
-    /// </summary>
     public class TravelTicketRepository : IRepository, IDisposable
     {
         private TravelTicketContext context;

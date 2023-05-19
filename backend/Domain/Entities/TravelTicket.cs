@@ -6,10 +6,6 @@ using System.Threading.Tasks;
 
 namespace Domain.Entity
 {
-    /// <summary>
-    /// Individual reports aggregated into a recurring location (ReportAggregate).
-    /// </summary>
-
     public class TravelTicket : entity
     {
         public ICollection from { get; set; }
@@ -19,8 +15,4 @@ namespace Domain.Entity
         public Date date { get; set; }
 
     }
-    /// <summary>
-    /// To be used by the de-serializer
-    /// </summary>
-    public ReportAggregate() { }
 }
