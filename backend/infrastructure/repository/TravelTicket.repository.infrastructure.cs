@@ -3,42 +3,33 @@ using Domain.Entities;
 using Domain.Services;
 using LiteDB;
 
-namespace Infrastructure.Repository
+namespace Infrastructure.Database
 {
-    public class TravelTicketRepository : IRepository, IDisposable
+    public class TravelTicketRepository : DomainRepository<TravelTicket>
     {
-        private TravelTicketContext context;
+        private LiteDatabase _database;
+        private ILiteCollection<TravelTicket> _collection;
 
-        public travelTicketRepository(TravelTicketContext context)
+        public TravelTicketRepository(LiteDatabase database)
         {
-            this.context = context;
+            _database = database;
+            _collection = _database.GetCollection<TravelTicket>("Tickets");
         }
+        public int Insert(TravelTicket entity) => _collection.Insert(entity);
 
-        public IEnumerable<TravelTicket> GetAll()
-        {
-            return context.TravelTicket.FindAll();
-        }
+        public bool Delete(int id) => _collection.Delete(id);
 
-        public TravelTicket GetStudentByID(int id)
-        {
-            return context.TravelTicket.Find(id);
-        }
+        public bool DeleteAll() => _collection.DeleteAll() > 0;
 
-        public void InsertTravelTicket(TravelTicket travelTicket)
-        {
-            context.TravelTicket.Add(travelTicket);
-        }
+        public IEnumerable<TravelTicket> GetAll() => _collection.FindAll();
 
-        public void DeleteTravelTicket(int travelTicketID)
-        {
-            TravelTicket travelTicket = context.TravelTicket.Find(travelTicketID);
-            context.TravelTicket.Remove(travelTicket);
-        }
+        public TravelTicket GetById(int id) => _collection.FindById(id);
 
-        public void UpdateTravelTicket(travelTicket travelTicket)
-        {
-            context.Entry(travelTicket).State = context.Update(travelTicket);
-        }
+        public bool Update(TravelTicket entity) => _collection.Update(entity);
+
+        public bool Upsert(TravelTicket entity) => _collection.Upsert(entity);
+
+        public void Dispose() { }
     }
 
 }

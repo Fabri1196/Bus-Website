@@ -1,102 +1,94 @@
-using Microsoft.AspNetCore.Mvc;
 using Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Domain.Services;
-using FluentValidation;
 
-namespace API.controllers
+namespace backend.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class TravelTicketController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ReportController : ControllerBase
+    // private static readonly string[] Summaries = new[]
+    // {
+    //     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+    // };
+
+    // private readonly ILogger<TravelTicketController> _logger;
+
+    // public TravelTicketController(ILogger<TravelTicketController> logger)
+    // {
+    //     _logger = logger;
+    // }
+
+    private readonly DomainReport _reportService;
+
+    public TravelTicketController(DomainReport reportService)
     {
-        private readonly IReportService _reportService;
+        _reportService = reportService;
+    }
 
-        public ReportController(IReportService reportService)
+    [HttpGet(Name = "GetAllTravelTickets")]
+    public ActionResult<IEnumerable<TravelTicket>> Get()
+    {
+        try
         {
-            _reportService = reportService;
+            var result = _reportService.GetAllTickets();
+            return Ok(result);
+        }
+        catch
+        {
+            return StatusCode(500);
+        }
+    }
+
+    [HttpGet("{id}")]
+    public ActionResult<TravelTicket> Get(int id)
+    {
+        try
+        {
+            var result = _reportService.GetTicket(id);
+            if (result == null) { return NotFound(); }
+            return Ok(result);
+        }
+        catch
+        {
+            return StatusCode(500);
         }
 
-        [HttpGet(Name = "GetAll")]
-        public ActionResult<IEnumerable<travelTicket>> Get()
+    }
+
+    [HttpPost]
+    public ActionResult Post([FromBody] TravelTicket ticket)
+    {
+        try
         {
-            try
-            {
-                var result = _reportService.GetAllReports();
-                return Ok(result);
-            }
-            catch
-            {
-                return StatusCode(500);
-            }
+            _reportService.CreateTicket(ticket);
+            return StatusCode(StatusCodes.Status201Created);
         }
-
-        [HttpGet("{id}")]
-        public ActionResult<travelTicket> Get(int id)
+        catch (FluentValidation.ValidationException ex)
         {
-            try
-            {
-                var result = _reportService.GetReport(id);
-                if (result == null) { return NotFound(); }
-                return Ok(result);
-            }
-            catch
-            {
-                return StatusCode(500);
-            }
-
+            return BadRequest(ex.Errors);
         }
-
-        [HttpPost]
-        public ActionResult Post([FromBody] travelTicket report)
+        catch
         {
-            try
-            {
-                _reportService.CreateReport(report);
-                return StatusCode(StatusCodes.Status201Created);
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(ex.Errors);
-            }
-            catch
-            {
-                return StatusCode(500);
-            }
+            return StatusCode(500);
         }
+    }
 
-        [HttpPut]
-        public ActionResult Put([FromBody] travelTicket report)
+    [HttpDelete("{id}")]
+    public ActionResult Delete(int id)
+    {
+        try
         {
-            try
+            if (_reportService.DeleteTicket(id))
             {
-                _reportService.UpdateReport(report);
                 return StatusCode(StatusCodes.Status200OK);
             }
-            catch (ValidationException ex)
-            {
-                return BadRequest(ex.Errors);
-            }
-            catch
-            {
-                return StatusCode(500);
-            }
+            return NotFound();
         }
-
-        [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        catch
         {
-            try
-            {
-                if (_reportService.DeleteReport(id))
-                {
-                    return StatusCode(StatusCodes.Status200OK);
-                }
-                return NotFound();
-            }
-            catch
-            {
-                return StatusCode(500);
-            }
+            return StatusCode(500);
         }
     }
 }
