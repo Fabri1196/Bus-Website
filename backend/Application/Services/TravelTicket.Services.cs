@@ -3,11 +3,11 @@ using Domain.Services;
 
 namespace Application.Services
 {
-    public class ReportService : DomainReport
+    public class TravelTicketService : DomainReport
     {
         private DomainRepository<TravelTicket> _repository;
 
-        public ReportService(DomainRepository<TravelTicket> repository)
+        public TravelTicketService(DomainRepository<TravelTicket> repository)
         {
             _repository = repository;
         }
